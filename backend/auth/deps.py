@@ -1,4 +1,4 @@
-# backend/auth/deps.py (only change is moving the import inside the function)
+# backend/auth/deps.py
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
@@ -28,7 +28,8 @@ def get_current_user(
     db: Session = Depends(get_db),
     email: str = Depends(get_current_user_email),
 ):
-    from ..crud.user import get_user_by_email  # ← lazy import avoids cycles
+    # Lazy import avoids circular dependency at import time
+    from ..crud.user import get_user_by_email
     user = get_user_by_email(db, email)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")

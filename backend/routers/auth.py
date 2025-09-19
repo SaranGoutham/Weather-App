@@ -6,6 +6,7 @@ from ..core.database import get_db
 from ..crud.user import create_user, authenticate, get_user_by_email
 from ..schemas import UserCreate, UserOut, Token, LoginRequest
 from ..auth.security import create_access_token
+from ..auth.deps import get_current_user_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -23,3 +24,13 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     token = create_access_token(subject=user.email)
     return {"access_token": token, "token_type": "bearer"}
+
+@router.get("/me", response_model=UserOut)
+def read_me(
+    email: str = Depends(get_current_user_email),
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_email(db, email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user

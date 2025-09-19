@@ -20,5 +20,7 @@ class Settings:
     OPENWEATHER_API_KEY: str = os.getenv("OPENWEATHER_API_KEY", "")
     OPENWEATHER_BASE_URL: str = os.getenv("OPENWEATHER_BASE_URL", "https://api.openweathermap.org/data/2.5")
     DEFAULT_UNITS: str = os.getenv("DEFAULT_UNITS", "metric")
+    RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
+    TRUST_PROXY: bool = os.getenv("TRUST_PROXY", "false").lower() == "true"
 
 settings = Settings()

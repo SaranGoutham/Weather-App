@@ -24,3 +24,8 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+weather.db
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
